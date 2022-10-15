@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { DayView } from './components/DayView'
+import './App.css'
+
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
+      <DayView 
+        periods={[
+          {
+            label: 'Work',
+            color: '#F4D35E',
+            start: 9,
+            end: 12
+          },
+          {
+            label: 'Work',
+            color: '#F4D35E',
+            start: 14,
+            end: 17
+          }
+        ]}
+      />
     </div>
   );
 }
