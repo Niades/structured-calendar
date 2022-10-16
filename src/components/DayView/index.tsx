@@ -3,12 +3,24 @@ import styles from './DayView.module.css'
 
 
 type Color = string
+type Time = number
+
+const HOUR_BLOCK_HEIGHT_PX = 60
 
 interface TimePeriod {
+  start: Time
+  end: Time
+}
+
+interface CalendarPeriod {
   label: string
   color: Color
-  start: number
-  end: number
+  time: TimePeriod
+}
+
+interface Event {
+  label: string
+  time: TimePeriod
 }
 
 interface HourBlockProps {
@@ -17,11 +29,37 @@ interface HourBlockProps {
 }
 
 interface DayViewProps {
-  periods: TimePeriod[]
+  periods: CalendarPeriod[]
+  events: Event[]
+}
+
+interface EventBlockProps {
+  label: string
+  time: TimePeriod
+}
+
+function EventBlock(props: EventBlockProps) {
+  const { label, time } = props
+  const length = time.end - time.start
+  return (
+    <div
+      className={styles.eventBlock}
+      style={{
+        top: time.start * HOUR_BLOCK_HEIGHT_PX,
+        height: length * HOUR_BLOCK_HEIGHT_PX
+      }}
+    >
+      {label}
+    </div>
+  )
 }
 
 function zeroPad(str: string): string {
   return str.length === 1 ? '0' + str : str
+}
+
+function hourInPeriod(hour: number, period: CalendarPeriod): boolean {
+  return hour >= period.time.start && hour <= period.time.end
 }
 
 function HourBlock(props: HourBlockProps) {
@@ -37,16 +75,12 @@ function HourBlock(props: HourBlockProps) {
   )
 }
 
-function hourInPeriod(hour: number, period: TimePeriod): boolean {
-  return hour >= period.start && hour <= period.end
-}
-
-function renderDay(periods: TimePeriod[]): ReactNode {
-  const hours = []
+function renderDay(periods: CalendarPeriod[], events: Event[]): ReactNode {
+  const content = []
   for(let i = 0; i <= 24; i++) {
     const period = periods.find(p => hourInPeriod(i, p))
     if(period) {
-      hours.push(
+      content.push(
         <HourBlock
           key={i.toString()}
           hour={i}
@@ -54,7 +88,7 @@ function renderDay(periods: TimePeriod[]): ReactNode {
         />
       )
     } else {
-      hours.push(
+      content.push(
         <HourBlock
           key={i.toString()}
           hour={i} 
@@ -62,12 +96,15 @@ function renderDay(periods: TimePeriod[]): ReactNode {
       )
     }
   }
-  return hours
+  events.forEach((e) => content.push(
+    <EventBlock label={e.label} time={e.time} />
+  ))
+  return content
 }
 
 function DayView(props: DayViewProps) {
-  const { periods } = props
-  const content = renderDay(periods)
+  const { periods, events } = props
+  const content = renderDay(periods, events)
   return (
     <div>
       {content}

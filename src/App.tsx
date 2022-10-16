@@ -12,14 +12,27 @@ function App() {
           {
             label: 'Work',
             color: '#F4D35E',
-            start: 9,
-            end: 12
+            time: {
+              start: 9,
+              end: 12
+            }
           },
           {
             label: 'Work',
             color: '#F4D35E',
-            start: 14,
-            end: 17
+            time: {
+              start: 14,
+              end: 17
+            }
+          }
+        ]}
+        events={[
+          {
+            label: 'test event rendering 1',
+            time: {
+              start: 14,
+              end: 17
+            }
           }
         ]}
       />
