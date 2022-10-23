@@ -1,4 +1,5 @@
 import { DayView } from './components/DayView'
+import { TodoList } from './components/TodoList'
 import './App.css'
 
 
@@ -7,7 +8,15 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <DayView 
+      <TodoList
+        items={[
+          {
+            text: 'test',
+            completed: false
+          }
+        ]}
+      />
+      <DayView
         periods={[
           {
             label: 'Work',

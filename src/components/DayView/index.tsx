@@ -97,7 +97,11 @@ function renderDay(periods: CalendarPeriod[], events: Event[]): ReactNode {
     }
   }
   events.forEach((e) => content.push(
-    <EventBlock label={e.label} time={e.time} />
+    <EventBlock
+      key={e.time.start.toString() + e.time.end.toString() + e.label}
+      label={e.label}
+      time={e.time}
+    />
   ))
   return content
 }
