@@ -8,13 +8,9 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <TodoList
-        items={[
-          {
-            text: 'test',
-            completed: false
-          }
-        ]}
+      <TodoList 
+        title="Work"
+        listId="work2"
       />
       <DayView
         periods={[

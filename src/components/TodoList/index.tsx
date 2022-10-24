@@ -1,10 +1,5 @@
-import { ChangeEventHandler, useCallback } from 'react'
-
-
-interface TodoItem {
-  text: string
-  completed: boolean
-}
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { completeTodo, uncompleteTodo } from '../../redux/slices/TodosSlice'
 
 interface TodoListCheckboxProps {
   checked: boolean
@@ -12,7 +7,8 @@ interface TodoListCheckboxProps {
 }
 
 interface TodoListProps {
-  items: TodoItem[]
+  title: string
+  listId: string
 }
 
 const TodoListCheckbox: React.FunctionComponent<TodoListCheckboxProps> = function(props) {
@@ -27,22 +23,36 @@ const TodoListCheckbox: React.FunctionComponent<TodoListCheckboxProps> = functio
 }
 
 const TodoList: React.FunctionComponent<TodoListProps> = function(props) {
-  const { items } = props
+  const { title, listId } = props
+  const dispatch = useAppDispatch()
+  const items = useAppSelector(state => state.todos.todos.filter((t) => t.listId === listId))
   return (
     <div>
-      <ul>
-        {items.map((item) => {
-          return (
-            <li key={item.text}>
-              <TodoListCheckbox
-                onCheck={(checked) => console.log(checked)}
-                checked={item.completed}
-              />
-              {item.text}
-            </li>
-          )
-        })}
-      </ul>
+      <span>{title}</span>
+      {items.length > 0 &&
+        <ul>
+          {items.map((item) => {
+            return (
+              <li key={item.text}>
+                <TodoListCheckbox
+                  onCheck={(checked) => {
+                    if(checked) {
+                      dispatch(completeTodo(item.id))
+                    } else {
+                      dispatch(uncompleteTodo(item.id))
+                    }
+                  }}
+                  checked={item.completed}
+                />
+                {item.text}
+              </li>
+            )
+          })}
+        </ul>
+      }
+      {items.length === 0 &&
+        <div>No items to display</div>
+      }
     </div>
   )
 }
